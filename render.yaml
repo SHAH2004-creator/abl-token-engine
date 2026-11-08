@@ -1,0 +1,14 @@
+# Render Blueprint: creates the backend web service from this repo.
+services:
+  - type: web
+    name: abl-token-engine
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/accounts/overview
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ORACLE_SECRET_KEY   # HMAC signing key, generated once by Render and never stored in the repo
+        generateValue: true
